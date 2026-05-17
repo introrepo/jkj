@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Safety Net: Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity Validations
+    function isValidPatient(data) {
+      return data.keys().hasAll(['nationalId', 'name', 'phone', 'age', 'createdAt'])
+        && data.nationalId is string && data.nationalId.size() > 0
+        && data.name is string && data.name.size() > 0
+        && data.phone is string && data.phone.size() > 0
+        && data.age is number && data.age >= 0;
+    }
+
+    function isValidVisit(data) {
+      return data.keys().hasAll(['date', 'treatment', 'medication', 'notes'])
+        && data.treatment is string && data.treatment.size() > 0;
+    }
+
+    // Match Rules
+    match /patients/{patientId} {
+      allow list, get: if isSignedIn();
+      allow create: if isSignedIn() 
+        && isValidPatient(incoming())
+        && incoming().createdAt == request.time;
+      
+      allow update: if isSignedIn() 
+        && isValidPatient(incoming())
+        // Immutable check
+        && incoming().createdAt == existing().createdAt;
+
+      // Visits Sub-collection
+      match /visits/{visitId} {
+        allow list, get: if isSignedIn();
+        allow create: if isSignedIn()
+          && isValidVisit(incoming())
+          && incoming().date == request.time;
+        
+        allow update: if isSignedIn()
+          && isValidVisit(incoming())
+          && incoming().date == existing().date;
+      }
+    }
+  }
+}

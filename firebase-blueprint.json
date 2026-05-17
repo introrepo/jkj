@@ -1,0 +1,71 @@
+{
+  "entities": {
+    "Patient": {
+      "title": "Patient",
+      "description": "Patient basic information",
+      "type": "object",
+      "properties": {
+        "nationalId": {
+          "type": "string",
+          "description": "National ID of the patient"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the patient"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number"
+        },
+        "age": {
+          "type": "number",
+          "description": "Age of the patient"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["nationalId", "name", "phone", "age"]
+    },
+    "Visit": {
+      "title": "Visit",
+      "description": "A single dental visit record",
+      "type": "object",
+      "properties": {
+        "patientId": {
+          "type": "string",
+          "description": "ID of the patient"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of the visit"
+        },
+        "treatment": {
+          "type": "string",
+          "description": "What was done during the visit"
+        },
+        "medication": {
+          "type": "string",
+          "description": "Medication prescribed"
+        },
+        "notes": {
+          "type": "string",
+          "description": "General status or notes"
+        }
+      },
+      "required": ["patientId", "date", "treatment"]
+    }
+  },
+  "firestore": {
+    "/patients": {
+      "schema": "Patient",
+      "description": "Collection of patients"
+    },
+    "/patients/{patientId}/visits": {
+      "schema": "Visit",
+      "description": "Collection of visits for a specific patient"
+    }
+  }
+}

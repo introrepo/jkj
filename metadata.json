@@ -1,0 +1,6 @@
+{
+  "name": "دنتال كير - نظام إدارة العيادات",
+  "description": "نظام شامل لإدارة بيانات المرضى وحجز المواعيد وتتبع التاريخ المرضي لعيادات الأسنان.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

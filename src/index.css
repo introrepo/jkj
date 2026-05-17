@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Almarai:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cairo", "Almarai", "Inter", ui-sans-serif, system-ui, sans-serif, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+:root {
+  --primary: #0f172a;
+  --primary-foreground: #f8fafc;
+  --secondary: #0284c7; /* Sky 700 */
+  --accent: #f59e0b;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900;
+  font-family: "Cairo", sans-serif;
+}
+
+.rtl {
+  direction: rtl;
+}
+
+input, textarea {
+  @apply focus:ring-sky-500 focus:border-sky-500;
+}
